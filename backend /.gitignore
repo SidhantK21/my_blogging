@@ -18,6 +18,8 @@ prisma
 node_modules/
 .wrangler
 
+.wrangler.jsonc
+
 # env
 .env
 .env.production
