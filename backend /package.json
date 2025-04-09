@@ -10,6 +10,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "hono": "^4.7.6",
+    "myblogcommonmod": "^1.0.0",
     "prisma": "^6.5.0"
   },
   "devDependencies": {
