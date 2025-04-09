@@ -93,16 +93,26 @@ blogRouter.put('/updateblog', async (c)=>{
 
 // pagination in this so that all the posts are not shoved in the web page 
 blogRouter.get('/bulk',async (c)=>{
+
     const prisma = new PrismaClient({
-        datasourceUrl: c.env?.DATABASE_URL	,
-    }).$extends(withAccelerate());
-
-    const posts=await prisma.post.findMany();
-
-    c.status(200);  
-    return c.json({
-        message:"All the posts are here !",posts
-    })
+		datasourceUrl: c.env?.DATABASE_URL,
+	}).$extends(withAccelerate());
+    
+      const page = Number(c.req.query('page') || 1);
+      const limit = Number(c.req.query('limit') || 5);
+      const skip = (page - 1) * limit;
+    
+      const posts = await prisma.post.findMany({
+        skip,
+        take: limit,
+      });
+    
+      return c.json({
+        message: "Posts fetched successfully",
+        page,
+        limit,
+        posts,
+      });
 })
 
 
