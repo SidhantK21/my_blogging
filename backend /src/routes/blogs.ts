@@ -24,12 +24,12 @@ blogRouter.use("/*", async (c,next)=>{
         if (user && user.id) {
           console.log("User ID from JWT:", user.id);
           c.set("userId", user.id as string);
-          await next(); // allow route to proceed
+          await next();
         } else {
-          return c.json({ message: "Unauthorized" }, 401); // invalid user
+          return c.json({ message: "User not logged in " }, 403); 
         }
       } catch (err) {
-        return c.json({ message: "Invalid or expired token" }, 401);
+        return c.json({ message: "User not logged in " }, 403); 
       }
 
 })
