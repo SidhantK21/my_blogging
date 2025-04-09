@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { Hono } from "hono";
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { decode, verify } from "hono/jwt";
+import { createblogInput,updateblogInput } from 'myblogcommonmod';
 
 export const blogRouter=new Hono<{
     Bindings:{
@@ -40,6 +41,15 @@ blogRouter.post('/writeblog', async (c)=>{
 	}).$extends(withAccelerate());
     
     const body = await c.req.json();
+
+    const { success }=createblogInput.safeParse(body);
+    if(!success){
+        c.status(411);
+        return c.json({
+            message:"Inputs are invalid"
+        })
+    }
+
     const userId=c.get("userId");
 
     const post = await prisma.post.create({
@@ -64,6 +74,14 @@ blogRouter.put('/updateblog', async (c)=>{
 	}).$extends(withAccelerate());
 
     const body = await c.req.json();
+
+    const { success }=updateblogInput.safeParse(body);
+    if(!success){
+        c.status(411);
+        return c.json({
+            message:"Inputs are invalid"
+        })
+    }
 
     const existingPost = await prisma.post.findUnique({
         where: {
