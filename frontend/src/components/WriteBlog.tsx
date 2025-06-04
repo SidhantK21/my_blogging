@@ -1,6 +1,37 @@
 import { motion } from "motion/react";
+import { useState } from "react";
+import { CreateBlogInput } from "myblogcommonmod";
+import axios from "axios";
 
 export const WriteBlog = () => {
+
+  const [title,setTitle]=useState<string>("");
+  const [content,setContent]=useState<string>("");
+
+  const handleBlogPost=()=>{
+
+    const blogData:CreateBlogInput={
+      title,
+      content
+    }
+
+    if(!title || !content ){
+      throw new Error("Please fill out all the details !")
+    }
+
+    try{
+      const responsePosting=axios.post("/api/v1/blog",{
+        blogData
+      })
+
+      console.log("Response : ",responsePosting);
+    }catch(e){
+      console.log("Error while posting the blog ",e);
+    }
+
+    console.log("Submitting the blog",blogData);
+  }
+
   return (
     <div className="w-full min-h-screen flex items-center justify-center px-4 py-6 sm:py-8">
       <div 
@@ -23,6 +54,8 @@ export const WriteBlog = () => {
               id="title"
               type="text"
               placeholder="Enter your blog title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg outline-none"
             />
           </div>
@@ -35,6 +68,8 @@ export const WriteBlog = () => {
               id="content"
               rows={6}
               placeholder="Write your content here..."
+              value={content}
+              onChange={(e)=>setContent(e.target.value)}
               className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg outline-none"
             ></textarea>
           </div>
@@ -43,6 +78,7 @@ export const WriteBlog = () => {
             initial={false}
             whileTap={{scale:0.97}}
             className="w-full bg-black text-white py-2 sm:py-2.5 text-sm font-semibold rounded-lg hover:bg-gray-900 transition-all duration-200"
+            onClick={handleBlogPost}
           >
             Publish Blog
           </motion.button>

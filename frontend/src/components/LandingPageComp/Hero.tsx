@@ -37,7 +37,7 @@ export const Hero = () => {
                 <div className="flex flex-col sm:flex-row gap-5">
                 <motion.button
                 onClick={()=>{
-                    navigate("/edit")
+                    navigate("/write")
                 }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
